@@ -33,5 +33,4 @@ model Task {
   title String
   description String
   isDone Boolean @default (false)
-  isDeleted Boolean @default(false)
 }
