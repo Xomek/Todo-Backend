@@ -10,10 +10,20 @@ export class TasksService {
   constructor(private dbService: DbService) {}
 
   async getTasks({ skip, take }: GetTasksDto) {
-    return await this.dbService.task.findMany();
+    const total = (await this.dbService.task.findMany()).length;
+
+    const tasks = await this.dbService.task.findMany({
+      skip: +skip,
+      take: +take,
+      orderBy: { isDone: 'asc' },
+    });
+
+    return { tasks, total };
   }
 
-  getDeletedTask() {}
+  async getTask(taskId: number) {
+    return await this.dbService.task.findFirst({ where: { id: +taskId } });
+  }
 
   async create(dto: CreateTaskDto) {
     return await this.dbService.task.create({
